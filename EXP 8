@@ -1,0 +1,100 @@
+int main()
+{
+    int found, flag, l;
+    int p[10][10], c[10][10];
+    int tp, tr;
+    int i, j, k = 0;
+    int m[10], r[10], a[10], temp[10], sum = 0;
+
+    printf("Enter total number of processes: ");
+    scanf("%d", &tp);
+
+    printf("Enter total number of resources: ");
+    scanf("%d", &tr);
+
+    printf("Enter Claim (Max Need) Matrix:\n");
+    for(i=0;i<tp;i++)
+    {
+        printf("Process %d:\n", i);
+        for(j=0;j<tr;j++)
+            scanf("%d",&c[i][j]);
+    }
+
+    printf("Enter Allocation Matrix:\n");
+    for(i=0;i<tp;i++)
+    {
+        printf("Process %d:\n", i);
+        for(j=0;j<tr;j++)
+            scanf("%d",&p[i][j]);
+    }
+
+    printf("Enter Total Resource Vector:\n");
+    for(i=0;i<tr;i++)
+        scanf("%d",&r[i]);
+
+    printf("Enter Available Resource Vector:\n");
+    for(i=0;i<tr;i++)
+    {
+        scanf("%d",&a[i]);
+        temp[i]=a[i];
+    }
+
+    for(i=0;i<tp;i++)
+    {
+        sum=0;
+        for(j=0;j<tr;j++)
+            sum+=p[i][j];
+
+        if(sum==0)
+        {
+            m[k]=i;
+            k++;
+        }
+    }
+
+    for(i=0;i<tp;i++)
+    {
+        flag=0;
+
+        for(l=0;l<k;l++)
+            if(i==m[l])
+                flag=1;
+
+        if(flag==0)
+        {
+            int possible=1;
+
+            for(j=0;j<tr;j++)
+                if(c[i][j] > temp[j])
+                {
+                    possible=0;
+                    break;
+                }
+
+            if(possible)
+            {
+                m[k]=i;
+                k++;
+
+                for(j=0;j<tr;j++)
+                    temp[j]+=p[i][j];
+            }
+        }
+    }
+
+    printf("Deadlock causing processes are:\n");
+
+    for(i=0;i<tp;i++)
+    {
+        found=0;
+
+        for(j=0;j<k;j++)
+            if(i==m[j])
+                found=1;
+
+        if(!found)
+            printf("P%d ", i);
+    }
+
+    return 0;
+}
